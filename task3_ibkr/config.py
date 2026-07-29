@@ -20,7 +20,19 @@ IB_HOST = os.environ.get("IB_HOST", "127.0.0.1")
 IB_PORT = int(os.environ.get("IB_PORT", 7497))     # 7497 = TWS paper trading
 IB_CLIENT_ID = int(os.environ.get("IB_CLIENT_ID", 101))
 
+# Market data type requested right after connecting (see ibkr_client.connect()).
+# 1 = Live, 2 = Frozen, 3 = Delayed, 4 = Delayed Frozen.
+# Demo/paper accounts without a live-data subscription will get
+# "Error 10089: Requested market data requires additional subscription for
+# API" on type 1 - default to 3 (Delayed) so the demo works out of the box.
+# If your account *does* have a real-time data subscription, set this to 1.
+MARKET_DATA_TYPE = int(os.environ.get("IB_MARKET_DATA_TYPE", 3))
+
 # --- Redis ---
+# Defaults assume Redis is running in Docker with -p 6379:6379 published to
+# localhost (see README.md). If your script itself is also running inside a
+# Docker container on the same custom network as Redis, set REDIS_HOST to
+# the Redis container's name instead (e.g. `redis`) via the env var below.
 REDIS_HOST = os.environ.get("REDIS_HOST", "127.0.0.1")
 REDIS_PORT = int(os.environ.get("REDIS_PORT", 6379))
 REDIS_DB = int(os.environ.get("REDIS_DB", 0))
